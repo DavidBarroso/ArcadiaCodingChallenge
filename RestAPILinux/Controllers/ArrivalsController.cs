@@ -21,6 +21,10 @@ namespace RestAPILinux.Controllers
         [HttpGet]
         public IEnumerable<ArrivalsByAirport> Get()
         {
+
+            OpenSkyClient.OpenSkyClient client = new OpenSkyClient.OpenSkyClient("https://opensky-network.org/api", "DavidBarroso", "AirbusTest");
+            var rs = client.GetArrivalsByAirport("EDDF", DateTime.Now, DateTime.Now.AddHours(12));
+
             var random = new Random();
             return Enumerable.Range(1, 5).Select(index => new ArrivalsByAirport
             {
