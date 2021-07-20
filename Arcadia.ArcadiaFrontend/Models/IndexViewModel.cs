@@ -1,4 +1,5 @@
 ﻿using Arcadia.Model;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace Arcadia.ArcadiaFrontend.Models
 {
     public class IndexViewModel
     {
-        public string AirportSelected { get; set; }
+        public string SelectedAirport { get; set; }
 
         public List<Airport> Airports { get; set; }
 
