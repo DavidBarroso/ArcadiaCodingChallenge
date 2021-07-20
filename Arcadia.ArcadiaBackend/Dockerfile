@@ -6,16 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["RestAPILinux/RestAPILinux.csproj", "RestAPILinux/"]
-RUN dotnet restore "RestAPILinux/RestAPILinux.csproj"
+COPY ["Arcadia.ArcadiaBackend/Arcadia.ArcadiaBackend.csproj", "Arcadia.ArcadiaBackend/"]
+RUN dotnet restore "Arcadia.ArcadiaBackend/Arcadia.ArcadiaBackend.csproj"
 COPY . .
-WORKDIR "/src/RestAPILinux"
-RUN dotnet build "RestAPILinux.csproj" -c Release -o /app/build
+WORKDIR "/src/Arcadia.ArcadiaBackend"
+RUN dotnet build "Arcadia.ArcadiaBackend.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "RestAPILinux.csproj" -c Release -o /app/publish
+RUN dotnet publish "Arcadia.ArcadiaBackend.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "RestAPILinux.dll"]
+ENTRYPOINT ["dotnet", "Arcadia.ArcadiaBackend.dll"]
