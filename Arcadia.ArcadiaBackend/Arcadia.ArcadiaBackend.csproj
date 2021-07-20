@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arcadia.Model\Arcadia.Model.csproj" />
-    <ProjectReference Include="..\HTTPRestClient\OpenSkyRestClient.csproj" />
+    <ProjectReference Include="..\Arcadia.OpenSkyRestClient\Arcadia.OpenSkyRestClient.csproj" />
   </ItemGroup>
 
 

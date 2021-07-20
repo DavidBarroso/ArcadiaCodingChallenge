@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestAPILinux", "RestAPILinux\RestAPILinux.csproj", "{92A46B70-13E4-4D24-BF15-8D03D7341456}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.ArcadiaBackend", "Arcadia.ArcadiaBackend\Arcadia.ArcadiaBackend.csproj", "{92A46B70-13E4-4D24-BF15-8D03D7341456}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenSkyRestClient", "HTTPRestClient\OpenSkyRestClient.csproj", "{9A32167E-4258-4878-B21B-0DF7579537A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.Model", "Arcadia.Model\Arcadia.Model.csproj", "{B57BFB79-CB67-4CC0-8097-8D3AD8F821E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcadia.Model", "Arcadia.Model\Arcadia.Model.csproj", "{B57BFB79-CB67-4CC0-8097-8D3AD8F821E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.OpenSkyRestClient", "Arcadia.OpenSkyRestClient\Arcadia.OpenSkyRestClient.csproj", "{42D832AB-2B1F-47F1-AECF-B3DA99E76831}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{92A46B70-13E4-4D24-BF15-8D03D7341456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92A46B70-13E4-4D24-BF15-8D03D7341456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92A46B70-13E4-4D24-BF15-8D03D7341456}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A32167E-4258-4878-B21B-0DF7579537A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A32167E-4258-4878-B21B-0DF7579537A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A32167E-4258-4878-B21B-0DF7579537A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A32167E-4258-4878-B21B-0DF7579537A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B57BFB79-CB67-4CC0-8097-8D3AD8F821E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B57BFB79-CB67-4CC0-8097-8D3AD8F821E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B57BFB79-CB67-4CC0-8097-8D3AD8F821E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B57BFB79-CB67-4CC0-8097-8D3AD8F821E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42D832AB-2B1F-47F1-AECF-B3DA99E76831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42D832AB-2B1F-47F1-AECF-B3DA99E76831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42D832AB-2B1F-47F1-AECF-B3DA99E76831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42D832AB-2B1F-47F1-AECF-B3DA99E76831}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
