@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Arcadia.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,29 +20,33 @@ namespace RestAPILinux.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ArrivalsByAirport> Get()
+        public IEnumerable<Arrivals> Get()
         {
 
-            OpenSkyClient.OpenSkyClient client = new OpenSkyClient.OpenSkyClient("https://opensky-network.org/api", "DavidBarroso", "AirbusTest");
-            var rs = client.GetArrivalsByAirport("EDDF", DateTime.Now, DateTime.Now.AddHours(12));
+            //OpenSkyClient.OpenSkyClient client = new OpenSkyClient.OpenSkyClient("https://opensky-network.org/api", "DavidBarroso", "AirbusTest");
+            OpenSkyClient.OpenSkyClient client = new OpenSkyClient.OpenSkyClient("https://opensky-network.org/api");
+            var rs = client.GetArrivals("EDDF", DateTime.Now, DateTime.Now.AddHours(12));
 
-            var random = new Random();
-            return Enumerable.Range(1, 5).Select(index => new ArrivalsByAirport
-            {
-                icao24 = Guid.NewGuid().ToString(),
-                firstSeen = random.Next(),
-                estDepartureAirport = Guid.NewGuid().ToString(),
-                lastSeen = random.Next(),
-                estArrivalAirport = Guid.NewGuid().ToString(),
-                callsign = Guid.NewGuid().ToString(),
-                estDepartureAirportHorizDistance = random.Next(),
-                estDepartureAirportVertDistance = random.Next(),
-                estArrivalAirportHorizDistance = random.Next(),
-                estArrivalAirportVertDistance = random.Next(),
-                departureAirportCandidatesCount = random.Next(),
-                arrivalAirportCandidatesCount = random.Next()
-            })
-            .ToArray();
+            return rs;
+            //MOCK DATA
+            //var random = new Random();
+            //return Enumerable.Range(1, 5).Select(index => new Arrivals
+            //{
+            //    icao24 = Guid.NewGuid().ToString(),
+            //    firstSeen = random.Next(),
+            //    estDepartureAirport = Guid.NewGuid().ToString(),
+            //    lastSeen = random.Next(),
+            //    estArrivalAirport = Guid.NewGuid().ToString(),
+            //    callsign = Guid.NewGuid().ToString(),
+            //    estDepartureAirportHorizDistance = random.Next(),
+            //    estDepartureAirportVertDistance = random.Next(),
+            //    estArrivalAirportHorizDistance = random.Next(),
+            //    estArrivalAirportVertDistance = random.Next(),
+            //    departureAirportCandidatesCount = random.Next(),
+            //    arrivalAirportCandidatesCount = random.Next()
+            //})
+            //.ToArray();
+            //END MOCK DATA
         }
     }
 }

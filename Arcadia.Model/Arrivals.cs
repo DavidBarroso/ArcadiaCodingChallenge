@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 
-namespace RestAPILinux
+namespace Arcadia.Model
 {
     /// <summary>
-    /// ArrivalsByAirport
+    /// Arrivals
     /// </summary>
-    public class ArrivalsByAirport
+    public class Arrivals
     {
         /// <summary>
         /// Gets or sets the icao24.
@@ -13,7 +13,7 @@ namespace RestAPILinux
         /// <value>
         /// The icao24.
         /// </value>
-        public string icao24 { get; set; }
+        public string Icao24 { get; set; }
 
         /// <summary>
         /// Gets or sets the first seen.
@@ -21,7 +21,7 @@ namespace RestAPILinux
         /// <value>
         /// The first seen.
         /// </value>
-        public int firstSeen { get; set; }
+        public int FirstSeen { get; set; }
 
         /// <summary>
         /// Gets or sets the est departure airport.
@@ -29,7 +29,7 @@ namespace RestAPILinux
         /// <value>
         /// The est departure airport.
         /// </value>
-        public string estDepartureAirport { get; set; }
+        public string EstDepartureAirport { get; set; }
 
         /// <summary>
         /// Gets or sets the last seen.
@@ -37,7 +37,7 @@ namespace RestAPILinux
         /// <value>
         /// The last seen.
         /// </value>
-        public int lastSeen { get; set; }
+        public int LastSeen { get; set; }
 
         /// <summary>
         /// Gets or sets the est arrival airport.
@@ -45,7 +45,7 @@ namespace RestAPILinux
         /// <value>
         /// The est arrival airport.
         /// </value>
-        public string estArrivalAirport { get; set; }
+        public string EstArrivalAirport { get; set; }
 
         /// <summary>
         /// Gets or sets the callsign.
@@ -53,7 +53,7 @@ namespace RestAPILinux
         /// <value>
         /// The callsign.
         /// </value>
-        public string callsign { get; set; }
+        public string Callsign { get; set; }
 
         /// <summary>
         /// Gets or sets the est departure airport horiz distance.
@@ -61,7 +61,7 @@ namespace RestAPILinux
         /// <value>
         /// The est departure airport horiz distance.
         /// </value>
-        public int estDepartureAirportHorizDistance { get; set; }
+        public int EstDepartureAirportHorizDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the est departure airport vert distance.
@@ -69,7 +69,7 @@ namespace RestAPILinux
         /// <value>
         /// The est departure airport vert distance.
         /// </value>
-        public int estDepartureAirportVertDistance { get; set; }
+        public int EstDepartureAirportVertDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the est arrival airport horiz distance.
@@ -77,7 +77,7 @@ namespace RestAPILinux
         /// <value>
         /// The est arrival airport horiz distance.
         /// </value>
-        public int estArrivalAirportHorizDistance { get; set; }
+        public int EstArrivalAirportHorizDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the est arrival airport vert distance.
@@ -85,7 +85,7 @@ namespace RestAPILinux
         /// <value>
         /// The est arrival airport vert distance.
         /// </value>
-        public int estArrivalAirportVertDistance { get; set; }
+        public int EstArrivalAirportVertDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the departure airport candidates count.
@@ -93,7 +93,7 @@ namespace RestAPILinux
         /// <value>
         /// The departure airport candidates count.
         /// </value>
-        public int departureAirportCandidatesCount { get; set; }
+        public int DepartureAirportCandidatesCount { get; set; }
 
         /// <summary>
         /// Gets or sets the arrival airport candidates count.
@@ -101,7 +101,7 @@ namespace RestAPILinux
         /// <value>
         /// The arrival airport candidates count.
         /// </value>
-        public int arrivalAirportCandidatesCount { get; set; }
+        public int ArrivalAirportCandidatesCount { get; set; }
 
     }
 }

@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Arcadia.Model\Arcadia.Model.csproj" />
     <ProjectReference Include="..\HTTPRestClient\OpenSkyRestClient.csproj" />
   </ItemGroup>
 

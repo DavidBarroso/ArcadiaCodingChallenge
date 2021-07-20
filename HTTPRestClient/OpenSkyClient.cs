@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Arcadia.Model;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,13 +61,33 @@ namespace OpenSkyClient
                 client.Authenticator = new RestSharp.Authenticators.HttpBasicAuthenticator(this.userName, this.password);
         }
 
+        public string GetArrivalsJSON(string airportICAO, DateTime begin, DateTime end)
+        {
+            RestRequest rq = GetArrivalsRQ(airportICAO, begin, end);
+            IRestResponse rs = client.Get(rq);
+            if (rs.StatusCode == HttpStatusCode.OK && rs.ContentType.ToLower().Contains("json"))
+                return rs.Content;
+
+            return null;
+        }
+
+        public List<Arrivals> GetArrivals(string airportICAO, DateTime begin, DateTime end)
+        {
+            RestRequest rq = GetArrivalsRQ(airportICAO, begin, end);
+            IRestResponse<List<Arrivals>> rs = client.Get<List<Arrivals>>(rq);
+            if (rs.StatusCode == HttpStatusCode.OK)
+                return rs.Data;
+
+            return null;
+        }
+
         /// <summary>
         /// Gets the arrivals by airport.
         /// </summary>
         /// <param name="airportICAO">The airport icao.</param>
         /// <param name="begin">The begin.</param>
         /// <param name="end">The end.</param>
-        public IRestResponse GetArrivalsByAirport(string airportICAO, DateTime begin, DateTime end)
+        private RestRequest GetArrivalsRQ(string airportICAO, DateTime begin, DateTime end)
         {
             string resource = "/flights/arrival";
 
@@ -79,10 +100,8 @@ namespace OpenSkyClient
             endParam = new KeyValuePair<string, object>("end", 1517230800);
             //END MOCK DATA
 
-            RestRequest rq = CreateRequest(resource, Method.GET, airportParam, beginParam, endParam);
-
-            IRestResponse rs = client.Get(rq);
-            return rs;
+            RestRequest rq = CreateBaseRequest(resource, Method.GET, airportParam, beginParam, endParam);
+            return rq;
         }
 
         /// <summary>
@@ -92,7 +111,7 @@ namespace OpenSkyClient
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
-        private RestRequest CreateRequest(string resource, Method method, params KeyValuePair<string, object>[] parameters)
+        private RestRequest CreateBaseRequest(string resource, Method method, params KeyValuePair<string, object>[] parameters)
         {
             if (string.IsNullOrEmpty(resource))
                 return null;
