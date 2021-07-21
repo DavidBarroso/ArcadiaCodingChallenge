@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.ArcadiaBackend", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.Model", "Arcadia.Model\Arcadia.Model.csproj", "{B57BFB79-CB67-4CC0-8097-8D3AD8F821E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.OpenSkyRestClient", "Arcadia.OpenSkyRestClient\Arcadia.OpenSkyRestClient.csproj", "{42D832AB-2B1F-47F1-AECF-B3DA99E76831}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.RestClientUtils", "Arcadia.RestClientUtils\Arcadia.RestClientUtils.csproj", "{42D832AB-2B1F-47F1-AECF-B3DA99E76831}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcadia.ArcadiaFrontend", "Arcadia.ArcadiaFrontend\Arcadia.ArcadiaFrontend.csproj", "{93F41CE5-E8DF-47AD-BE76-DCF52E6A07B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.ArcadiaFrontend", "Arcadia.ArcadiaFrontend\Arcadia.ArcadiaFrontend.csproj", "{93F41CE5-E8DF-47AD-BE76-DCF52E6A07B6}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7F0D3A5F-259E-4AFF-BE4D-D837A87EE998}"
 EndProject
