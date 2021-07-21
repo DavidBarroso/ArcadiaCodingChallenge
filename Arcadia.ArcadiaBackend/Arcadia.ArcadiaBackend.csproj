@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <Authors>David Barroso Fernández</Authors>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arcadia.Model\Arcadia.Model.csproj" />
-    <ProjectReference Include="..\Arcadia.OpenSkyRestClient\Arcadia.OpenSkyRestClient.csproj" />
+    <ProjectReference Include="..\Arcadia.RestClientUtils\Arcadia.RestClientUtils.csproj" />
   </ItemGroup>
 
 

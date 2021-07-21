@@ -1,0 +1,29 @@
+﻿@model IndexViewModel
+<div class="form-horizontal">
+    <hr />
+    <div class="form-group">
+        @*departure airport, callsign, departure airport distance*@
+        <table class="table table-responsive" style="width:400px">
+            <tr>
+                @*@Html.DisplayNameFor(model => model.Name)*@
+                <th>Departure Airport</th>
+                <th>CallSign</th>
+                <th>Departure Airport Distance</th>
+            </tr>
+            @foreach (var item in Model.Arrivals)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstDepartureAirport)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Callsign)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstDepartureAirportHorizDistance)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

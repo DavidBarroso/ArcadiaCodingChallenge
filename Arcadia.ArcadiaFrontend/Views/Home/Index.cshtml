@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model Arcadia.ArcadiaFrontend.Models.IndexViewModel
+@using (Html.BeginForm())
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="text-center">
+                <h1 class="display-4">Arcadia Coding challenge</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                @*@Html.Partial("ArrivalsFilter")*@
+                <partial name="/Views/Controls/ArrivalsFilter.cshtml" />
+            </div>
+            <div class="col-md-8">
+                <div class="row" id="filteredArrivals">
+                    <partial name="/Views/Controls/ArrivalsFiltered.cshtml" />
+                </div>
+                <div class="row">
+                    Selected result
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="submit" id="saveBtn" />
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#saveBtn").click(function (e) {
+                e.preventDefault();
+
+                //var _form = $(this).closest("form");
+                //$.post(_form.attr("action"), _form.serialize(), function (res) {
+                //    //TODO
+                //    alert("TODO: Response: " + res);
+                //});
+
+                var _form = $(this).closest("form");
+                $.post('/Home/FilterArrivals', _form.serialize(), function (res) {
+                    $("#filteredArrivals").html(res);
+                });
+            });
+        });
+    </script>
+}

@@ -5,6 +5,7 @@ namespace Arcadia.Model
     /// <summary>
     /// Arrivals
     /// </summary>
+    [Serializable]
     public class Arrivals
     {
         /// <summary>
@@ -61,7 +62,7 @@ namespace Arcadia.Model
         /// <value>
         /// The est departure airport horiz distance.
         /// </value>
-        public int EstDepartureAirportHorizDistance { get; set; }
+        public int? EstDepartureAirportHorizDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the est departure airport vert distance.
@@ -69,7 +70,7 @@ namespace Arcadia.Model
         /// <value>
         /// The est departure airport vert distance.
         /// </value>
-        public int EstDepartureAirportVertDistance { get; set; }
+        public int? EstDepartureAirportVertDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the est arrival airport horiz distance.
@@ -77,7 +78,7 @@ namespace Arcadia.Model
         /// <value>
         /// The est arrival airport horiz distance.
         /// </value>
-        public int EstArrivalAirportHorizDistance { get; set; }
+        public int? EstArrivalAirportHorizDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the est arrival airport vert distance.
@@ -85,7 +86,7 @@ namespace Arcadia.Model
         /// <value>
         /// The est arrival airport vert distance.
         /// </value>
-        public int EstArrivalAirportVertDistance { get; set; }
+        public int? EstArrivalAirportVertDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the departure airport candidates count.
@@ -93,7 +94,7 @@ namespace Arcadia.Model
         /// <value>
         /// The departure airport candidates count.
         /// </value>
-        public int DepartureAirportCandidatesCount { get; set; }
+        public int? DepartureAirportCandidatesCount { get; set; }
 
         /// <summary>
         /// Gets or sets the arrival airport candidates count.
@@ -101,7 +102,7 @@ namespace Arcadia.Model
         /// <value>
         /// The arrival airport candidates count.
         /// </value>
-        public int ArrivalAirportCandidatesCount { get; set; }
+        public int? ArrivalAirportCandidatesCount { get; set; }
 
     }
 }
