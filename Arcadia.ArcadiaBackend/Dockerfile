@@ -7,6 +7,8 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
 COPY ["Arcadia.ArcadiaBackend/Arcadia.ArcadiaBackend.csproj", "Arcadia.ArcadiaBackend/"]
+COPY ["Arcadia.OpenSkyRestClient/Arcadia.OpenSkyRestClient.csproj", "Arcadia.OpenSkyRestClient/"]
+COPY ["Arcadia.Model/Arcadia.Model.csproj", "Arcadia.Model/"]
 RUN dotnet restore "Arcadia.ArcadiaBackend/Arcadia.ArcadiaBackend.csproj"
 COPY . .
 WORKDIR "/src/Arcadia.ArcadiaBackend"

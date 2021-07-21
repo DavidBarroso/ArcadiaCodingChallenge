@@ -1,0 +1,37 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "composeLaunchServiceName": "arcadia.arcadiafrontend",
+      "serviceActions": {
+        "arcadia.arcadiabackend": "StartDebugging",
+        "arcadia.arcadiafrontend": "StartDebugging"
+      },
+      "composeLaunchAction": "LaunchBrowser",
+      "commandVersion": "1.0",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}"
+    },
+    "Docker Compose - Front": {
+      "commandName": "DockerCompose",
+      "composeLaunchServiceName": "arcadia.arcadiafrontend",
+      "serviceActions": {
+        "arcadia.arcadiabackend": "StartDebugging",
+        "arcadia.arcadiafrontend": "StartDebugging"
+      },
+      "composeLaunchAction": "LaunchBrowser",
+      "commandVersion": "1.0",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}"
+    },
+    "Docker Compose - Back": {
+      "commandName": "DockerCompose",
+      "composeLaunchServiceName": "arcadia.arcadiabackend",
+      "serviceActions": {
+        "arcadia.arcadiabackend": "StartDebugging",
+        "arcadia.arcadiafrontend": "DoNotStart"
+      },
+      "composeLaunchAction": "LaunchBrowser",
+      "commandVersion": "1.0",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/arrivals"
+    }
+  }
+}

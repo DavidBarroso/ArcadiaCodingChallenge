@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcadia.OpenSkyRestClient",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcadia.ArcadiaFrontend", "Arcadia.ArcadiaFrontend\Arcadia.ArcadiaFrontend.csproj", "{93F41CE5-E8DF-47AD-BE76-DCF52E6A07B6}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7F0D3A5F-259E-4AFF-BE4D-D837A87EE998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{93F41CE5-E8DF-47AD-BE76-DCF52E6A07B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93F41CE5-E8DF-47AD-BE76-DCF52E6A07B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93F41CE5-E8DF-47AD-BE76-DCF52E6A07B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0D3A5F-259E-4AFF-BE4D-D837A87EE998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0D3A5F-259E-4AFF-BE4D-D837A87EE998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0D3A5F-259E-4AFF-BE4D-D837A87EE998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0D3A5F-259E-4AFF-BE4D-D837A87EE998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

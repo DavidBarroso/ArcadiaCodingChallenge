@@ -56,7 +56,8 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             if (model.Airports == null)
                 model.Airports = _airports;
 
-            RestClient client = new RestClient("http://localhost:49161/");
+            string host = "http://arcadia.arcadiabackend";
+            RestClient client = new RestClient(host);
             RestRequest rq = new RestRequest("arrivals", Method.GET, DataFormat.Json);
             IRestResponse rs = client.Get(rq);
 

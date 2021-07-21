@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  arcadia.arcadiabackend:
+    image: ${DOCKER_REGISTRY-}arcadiaarcadiabackend
+    build:
+      context: .
+      dockerfile: Arcadia.ArcadiaBackend/Dockerfile
+    networks:
+      - arcadiaNetwork
+    ports:
+       - 10271:80
+
+  arcadia.arcadiafrontend:
+    image: ${DOCKER_REGISTRY-}arcadiaarcadiafrontend
+    build:
+      context: .
+      dockerfile: Arcadia.ArcadiaFrontend/Dockerfile
+    networks:
+      - arcadiaNetwork
+    links:
+        - arcadia.arcadiabackend
+    ports:
+       - 10272:80
+       - 10273:443
+
+networks:
+  arcadiaNetwork:
+    driver: bridge
