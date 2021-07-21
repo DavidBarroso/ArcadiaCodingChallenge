@@ -16,5 +16,7 @@ namespace Arcadia.ArcadiaFrontend.Models
         public DateTime Begin { get; set; }
 
         public DateTime End { get; set; }
+
+        public List<Arrivals> Arrivals { get; set; }
     }
 }

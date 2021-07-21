@@ -32,6 +32,8 @@ namespace Arcadia.ArcadiaFrontend.Controllers
                     model = new IndexViewModel();
                 if (model.Airports == null)
                     model.Airports = GetAirports();
+                if (model.Arrivals == null)
+                    model.Arrivals = new List<Arrivals>();
                 return View(model);
             }
             catch (Exception ex)
@@ -52,6 +54,8 @@ namespace Arcadia.ArcadiaFrontend.Controllers
                 model = new IndexViewModel();
             if (model.Airports == null)
                 model.Airports = GetAirports();
+            if (model.Arrivals == null)
+                model.Arrivals = new List<Arrivals>();
 
             RestClient client = RestClientFactory.CreateRestClient(HOST);
 
@@ -62,8 +66,10 @@ namespace Arcadia.ArcadiaFrontend.Controllers
 
             RestRequest rq = RestClientFactory.CreateRestRequest(ARRIVALS_RESOURCE, Method.GET, DataFormat.Json, icao, begin, end);
             IRestResponse rs = client.Get(rq);
+            Arrivals[] arrivals = RestClientFactory.GetData<Arrivals[]>(rs.Content);
+            model.Arrivals = arrivals.ToList();
 
-            return PartialView("~/Views/Controls/ArrivalsFiltered.cshtml");
+            return PartialView("~/Views/Controls/ArrivalsFiltered.cshtml", model);
 
             //return PartialView("~/Views/Controls/ArrivalsFilter.cshtml", indexModel);
         }

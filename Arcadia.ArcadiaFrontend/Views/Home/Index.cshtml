@@ -18,7 +18,7 @@
                 <partial name="/Views/Controls/ArrivalsFilter.cshtml" />
             </div>
             <div class="col-md-8">
-                <div class="row">
+                <div class="row" id="filteredArrivals">
                     <partial name="/Views/Controls/ArrivalsFiltered.cshtml" />
                 </div>
                 <div class="row">
@@ -44,8 +44,7 @@
 
                 var _form = $(this).closest("form");
                 $.post('/Home/FilterArrivals', _form.serialize(), function (res) {
-                    //TODO
-                    alert("TODO: Response: " + res);
+                    $("#filteredArrivals").html(res);
                 });
             });
         });
