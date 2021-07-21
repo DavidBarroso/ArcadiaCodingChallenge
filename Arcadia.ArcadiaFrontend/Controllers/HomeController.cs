@@ -1,4 +1,5 @@
-﻿using Arcadia.ArcadiaFrontend.Models;
+﻿using Arcadia.ArcadiaFrontend.Extensions;
+using Arcadia.ArcadiaFrontend.Models;
 using Arcadia.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using System.Linq;
 using RestSharp;
 using Arcadia.RestClientUtils;
 
+
 namespace Arcadia.ArcadiaFrontend.Controllers
 {
     public class HomeController : BaseClientController
@@ -18,6 +20,8 @@ namespace Arcadia.ArcadiaFrontend.Controllers
         private const string HOST = "http://arcadia.arcadiabackend";
         private const string ARRIVALS_RESOURCE = "arrivals";
         private const string AIRPORTS_RESOURCE = "airports";
+        private const string SESSION_KEY_AIRPORTS = "AIRPORTS";
+        private const string SESSION_KEY_ARRIVALS = "ARRIVALS";
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -30,10 +34,9 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             {
                 if (model == null)
                     model = new IndexViewModel();
-                if (model.Airports == null)
-                    model.Airports = GetAirports();
-                if (model.Arrivals == null)
-                    model.Arrivals = new List<Arrivals>();
+                model.Airports = GetAirports();
+                model.Arrivals = new List<Arrivals>();
+
                 return View(model);
             }
             catch (Exception ex)
@@ -52,26 +55,14 @@ namespace Arcadia.ArcadiaFrontend.Controllers
         {
             if (model == null)
                 model = new IndexViewModel();
-            if (model.Airports == null)
-                model.Airports = GetAirports();
-            if (model.Arrivals == null)
-                model.Arrivals = new List<Arrivals>();
+            model.Airports = GetAirports();
+            List<Arrivals> arrivals = GetArrivals(model.SelectedAirport, model.Begin, model.End);
 
-            RestClient client = RestClientFactory.CreateRestClient(HOST);
+            //TODO: filter
 
-            KeyValuePair<string, object> icao = new KeyValuePair<string, object>("icao", model.SelectedAirport);
-            KeyValuePair<string, object> begin = new KeyValuePair<string, object>("begin", RestClientFactory.GetDateTimeAsUnixFormat(model.Begin));
-            KeyValuePair<string, object> end = new KeyValuePair<string, object>("end", RestClientFactory.GetDateTimeAsUnixFormat(model.End));
-
-
-            RestRequest rq = RestClientFactory.CreateRestRequest(ARRIVALS_RESOURCE, Method.GET, DataFormat.Json, icao, begin, end);
-            IRestResponse rs = client.Get(rq);
-            Arrivals[] arrivals = RestClientFactory.GetData<Arrivals[]>(rs.Content);
-            model.Arrivals = arrivals.ToList();
+            model.Arrivals = arrivals;
 
             return PartialView("~/Views/Controls/ArrivalsFiltered.cshtml", model);
-
-            //return PartialView("~/Views/Controls/ArrivalsFilter.cshtml", indexModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -80,20 +71,67 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
         private List<Airport> GetAirports()
         {
-            RestClient client = RestClientFactory.CreateRestClient(HOST);
-            RestRequest rq = RestClientFactory.CreateRestRequest(AIRPORTS_RESOURCE, Method.GET, DataFormat.Json);
-            IRestResponse rs = client.Get(rq);
-            if (rs.StatusCode == System.Net.HttpStatusCode.OK && rs.ContentType.ToLower().Contains("json"))
+            List<Airport> airportsInCache = HttpContext.Session.GetFromSession<List<Airport>>(SESSION_KEY_AIRPORTS);
+            if (airportsInCache == null)
             {
-                Airport[] airports = RestClientFactory.GetData<Airport[]>(rs.Content);
-                if (airports == null)
-                    return null;
-
-                return airports.ToList();
+                RestClient client = RestClientFactory.CreateRestClient(HOST);
+                RestRequest rq = RestClientFactory.CreateRestRequest(AIRPORTS_RESOURCE, Method.GET, DataFormat.Json);
+                IRestResponse rs = client.Get(rq);
+                Airport[] airports = null;
+                if (rs.StatusCode == System.Net.HttpStatusCode.OK && rs.ContentType.ToLower().Contains("json"))
+                    airports = RestClientFactory.GetData<Airport[]>(rs.Content);
+                if (airports != null)
+                {
+                    airportsInCache = airports.ToList();
+                    HttpContext.Session.SetInSession(SESSION_KEY_AIRPORTS, airportsInCache);
+                }
+                else
+                {
+                    airportsInCache = new List<Airport>();
+                }
             }
-            return null;
+            return airportsInCache;
+        }
+
+        private List<Arrivals> GetArrivals(string icao, DateTime begin, DateTime end)
+        {
+            
+            int beginUnixFormat = RestClientFactory.GetDateTimeAsUnixFormat(begin);
+            int endUnixFormat = RestClientFactory.GetDateTimeAsUnixFormat(end);
+            ArrivalCollection arrivalsInCache = HttpContext.Session.GetFromSession<ArrivalCollection>(SESSION_KEY_ARRIVALS);
+
+            bool sameArrivalsCollection = arrivalsInCache == null ? false : string.Equals(icao, arrivalsInCache.ICAO) &&
+                                                                            string.Equals(beginUnixFormat, arrivalsInCache.Begin) &&
+                                                                            string.Equals(endUnixFormat, arrivalsInCache.End);
+            if (!sameArrivalsCollection)
+            {
+                RestClient client = RestClientFactory.CreateRestClient(HOST);
+
+                KeyValuePair<string, object> icaoParam = new KeyValuePair<string, object>("icao", icao);
+                KeyValuePair<string, object> beginParam = new KeyValuePair<string, object>("begin", beginUnixFormat);
+                KeyValuePair<string, object> endParam = new KeyValuePair<string, object>("end", endUnixFormat);
+
+                RestRequest rq = RestClientFactory.CreateRestRequest(ARRIVALS_RESOURCE, Method.GET, DataFormat.Json, icaoParam, beginParam, endParam);
+                IRestResponse rs = client.Get(rq);
+
+                List<Arrivals> arrivals = null;
+                if (rs.StatusCode == System.Net.HttpStatusCode.OK && rs.ContentType.ToLower().Contains("json"))
+                    arrivals = RestClientFactory.GetData<List<Arrivals>>(rs.Content);
+                if (arrivals != null)
+                {
+                    arrivalsInCache = new ArrivalCollection(icao, beginUnixFormat, endUnixFormat, arrivals.ToList());
+                    HttpContext.Session.SetInSession(SESSION_KEY_ARRIVALS, arrivalsInCache);
+                }
+                else
+                {
+                    arrivalsInCache = new ArrivalCollection(icao, beginUnixFormat, endUnixFormat, new List<Arrivals>()); ;
+                }
+            }
+
+            return arrivalsInCache.ToList();
         }
     }
 }

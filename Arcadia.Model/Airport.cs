@@ -7,6 +7,7 @@ namespace Arcadia.Model
     /// <summary>
     /// Airport
     /// </summary>
+    [Serializable]
     public class Airport
     {
         /// <summary>

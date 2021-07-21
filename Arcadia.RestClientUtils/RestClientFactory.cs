@@ -7,7 +7,7 @@ using System.Text.Json;
 namespace Arcadia.RestClientUtils
 {
     /// <summary>
-    /// OpenSkyClient
+    /// RestClientFactory
     /// </summary>
     public static class RestClientFactory
     {

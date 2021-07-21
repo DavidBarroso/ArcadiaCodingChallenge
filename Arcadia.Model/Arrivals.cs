@@ -5,6 +5,7 @@ namespace Arcadia.Model
     /// <summary>
     /// Arrivals
     /// </summary>
+    [Serializable]
     public class Arrivals
     {
         /// <summary>
