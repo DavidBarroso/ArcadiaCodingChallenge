@@ -28,11 +28,11 @@ namespace Arcadia.ArcadiaBackend.Controllers
         [HttpGet]
         public IEnumerable<Arrivals> Get(string icao, string begin, string end)
         {
-            //MockRQ
-            icao = "EDDF";
-            begin = "1517227200";
-            end = "1517230800";
-            //END MockRQ
+            ////MockRQ
+            //icao = "EDDF";
+            //begin = "1517227200";
+            //end = "1517230800";
+            ////END MockRQ
 
             KeyValuePair<string, object> param1 = new KeyValuePair<string, object>("airport", icao);
             KeyValuePair<string, object> param2 = new KeyValuePair<string, object>("begin", begin);
