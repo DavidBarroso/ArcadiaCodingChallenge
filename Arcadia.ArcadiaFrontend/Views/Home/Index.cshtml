@@ -13,11 +13,11 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4">
-                @*@Html.Partial("ArrivalsFilter")*@
+            <div class="col-4">
                 <partial name="/Views/Controls/ArrivalsFilter.cshtml" />
+                <input type="submit"  class="btn btn-primary" id="saveBtn" />
             </div>
-            <div class="col-md-8">
+            <div class="col-8">
                 <div class="row" id="filteredArrivals">
                     <partial name="/Views/Controls/ArrivalsFiltered.cshtml" />
                 </div>
@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <input type="submit" id="saveBtn" />
+    
 }
 
 @section scripts {
@@ -35,13 +35,6 @@
         $(function () {
             $("#saveBtn").click(function (e) {
                 e.preventDefault();
-
-                //var _form = $(this).closest("form");
-                //$.post(_form.attr("action"), _form.serialize(), function (res) {
-                //    //TODO
-                //    alert("TODO: Response: " + res);
-                //});
-
                 var _form = $(this).closest("form");
                 $.post('/Home/FilterArrivals', _form.serialize(), function (res) {
                     $("#filteredArrivals").html(res);

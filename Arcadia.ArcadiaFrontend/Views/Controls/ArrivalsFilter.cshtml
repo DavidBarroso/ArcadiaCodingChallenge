@@ -1,14 +1,6 @@
 ﻿@model Arcadia.ArcadiaFrontend.Models.IndexViewModel
-<div class="editor-label">
-    @Html.LabelFor(m => m.SelectedAirport)
-</div>
 <div class="editor-field">
     @Html.DropDownListFor(m => m.SelectedAirport, new SelectList(Model.Airports, "Icao", "Name"))
-
-
-    @Html.EditorFor(model => model.Begin, new { htmlAttributes = new { @class = "form-control datepicker", @type = "date" } })
-    @Html.EditorFor(model => model.End, new { htmlAttributes = new { @class = "form-control datepicker", @type = "date" } })
-</div>
-<div>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp- asp-action="FilterArrivals">Filter arrivals</a>
+    @Html.EditorFor(model => model.Begin, new { @type = "date", @class = "form-control datepicker", @Value = Model.Begin.ToString("dd/MM/yyyy hh:mm") })
+    @Html.EditorFor(model => model.End, new { @type = "date", @class = "form-control datepicker", @Value = Model.End.ToString("dd/MM/yyyy hh:mm") })
 </div>

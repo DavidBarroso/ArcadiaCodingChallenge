@@ -34,6 +34,8 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             {
                 if (model == null)
                     model = new IndexViewModel();
+                model.Begin = DateTime.Now;
+                model.End = DateTime.Now;
                 model.Airports = GetAirports();
                 model.Arrivals = new List<Arrivals>();
 
