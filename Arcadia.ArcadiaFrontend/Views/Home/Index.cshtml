@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Arcadia challenge";
+    ViewData["Title"] = "Arcadia Coding challenge";
 }
 
 @model Arcadia.ArcadiaFrontend.Models.IndexViewModel
@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="text-center" style="margin-top: 2em; margin-bottom: 2em">
-            <h1 class="display-4">Arcadia Coding challenge</h1>
+            <h1 class="display-4">Arrivals by Airport</h1>
         </div>
     </div>
 
@@ -37,10 +37,14 @@
             $("#bFilterArrivals").click(function (e) {
                 e.preventDefault();
                 var _form = $(this).closest("form");
-                $.post('/Home/FilterArrivals', _form.serialize(), function (res) {
-                    $("#filteredArrivals").html(res);
+                $.post('/Home/GetFilteredArrivals', _form.serialize(), function (res) {
+                    $('#tArrivals').bootstrapTable('load', res)
                 });
             });
+        });
+
+        $('#tArrivals').on('click', 'tbody tr', function (event) {
+            $(this).addClass('highlight').siblings().removeClass('highlight');
         });
     </script>
 }

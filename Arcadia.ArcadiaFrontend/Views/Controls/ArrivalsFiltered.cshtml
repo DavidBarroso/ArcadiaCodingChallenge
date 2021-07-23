@@ -1,28 +1,24 @@
 ﻿@model IndexViewModel
 <div class="container-fluid">
     <div class="form-horizontal">
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <tr>
-                    @*departure airport, callsign, departure airport distance*@
-                    <th>Departure Airport</th>
-                    <th>CallSign</th>
-                    <th>Departure Airport Distance</th>
-                </tr>
-                @foreach (var item in Model.Arrivals)
-                {
+        <div class="table-responsive table-striped table-hover">
+            <table id="tArrivals"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true"
+                   data-pagination="true"
+                   data-pagination-parts="pageList"
+                   data-height="400"
+                   data-virtual-scroll="true"
+                   data-show-columns="true">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EstDepartureAirport)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Callsign)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EstDepartureAirportHorizDistance)
-                        </td>
+                        <th data-field="estDepartureAirport" data-sortable="true">Departure airport</th>
+                        <th data-field="callsign" data-sortable="true">CallSign</th>
+                        <th data-field="estArrivalAirport" data-sortable="true">Arrival airport</th>
+                        <th data-field="estDepartureAirportHorizDistance" data-sortable="true">Distance</th>
                     </tr>
-                }
+                </thead>
             </table>
         </div>
     </div>
