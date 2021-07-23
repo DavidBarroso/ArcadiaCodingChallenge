@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Arcadia.RestClientUtils\Arcadia.RestClientUtils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\openlayers\" />
+  </ItemGroup>
+
 </Project>
