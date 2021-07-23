@@ -32,12 +32,12 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/lib/openlayers/css/ol.css" />
-    <link rel="stylesheet" href="~/css/arcadia_oi_styles.css" />
+    <link rel="stylesheet" href="~/css/arcadia_ol_styles.css" />
 }
 
 @section scripts {
-    <script type="text/javascript" src="~/js/arcadia_oi_scripts.js"></script>
     <script type="text/javascript" src="~/lib/openlayers/js/ol.js"></script>
+    <script type="text/javascript" src="~/js/arcadia_ol_scripts.js"></script>
 
     <script type="text/javascript">
         //Get & filter arrivals
@@ -45,8 +45,10 @@
             $("#bFilterArrivals").click(function (e) {
                 e.preventDefault();
                 var _form = $(this).closest("form");
+                viewer.ClearFeatures();
                 $.post('/Home/GetFilteredArrivals', _form.serialize(), function (res) {
                     $('#tArrivals').bootstrapTable('load', res)
+                    viewer.AddFeatures(res);
                 });
             });
         });
@@ -58,18 +60,10 @@
     </script>
 
     <script type="text/javascript">
-        //Load map viewer
-        var map = new ol.Map({
-            target: 'map',
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM()
-                })
-            ],
-            view: new ol.View({
-                center: ol.proj.fromLonLat([37.41, 8.82]),
-                zoom: 4
-            })
-        });
+        var airports = @Html.Raw(Json.Serialize(Model.Airports));
+        var viewer = new olViewer();
+        viewer.Init('mapViewer', airports);
+        //var mapViewerObj = new olViewer('mapViewer'));
+        //mapViewerObj.Init();
     </script>
 }
