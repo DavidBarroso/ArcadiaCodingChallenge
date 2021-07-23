@@ -5,46 +5,63 @@
 @model Arcadia.ArcadiaFrontend.Models.IndexViewModel
 @using (Html.BeginForm())
 {
-
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="text-center" style="margin-top: 2em; margin-bottom: 2em">
-            <h1 class="display-4">Arrivals by Airport</h1>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-4">
-            <partial name="/Views/Controls/ArrivalsFilter.cshtml" />
-            <input type="submit" class="btn btn-primary" id="bFilterArrivals" />
-        </div>
-        <div class="col-8">
-            <div class="row" id="filteredArrivals">
-                <partial name="/Views/Controls/ArrivalsFiltered.cshtml" />
-            </div>
-            <div class="row">
-                Selected result
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="text-center" style="margin-top: 0.4em; margin-bottom: 0.4em">
+                <h1 class="display-5">Arrivals by Airport</h1>
             </div>
         </div>
-    </div>
-</div>
 
+
+        <div class="row">
+            <div class="col-lg-4 col-12">
+                <partial name="/Views/Controls/ArrivalsFilter.cshtml" />
+                <input type="submit" class="btn btn-primary" id="bFilterArrivals" />
+            </div>
+            <div class="col-lg-8 col-12">
+                <div class="row" id="filteredArrivals">
+                    <partial name="/Views/Controls/ArrivalsFiltered.cshtml" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <partial name="/Views/Controls/MapViewer.cshtml" />
+        </div>
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/openlayers/css/ol.css" />
+    <link rel="stylesheet" href="~/css/arcadia_ol_styles.css" />
 }
 
 @section scripts {
+    <script type="text/javascript" src="~/lib/openlayers/js/ol.js"></script>
+    <script type="text/javascript" src="~/js/arcadia_ol_scripts.js"></script>
+
     <script type="text/javascript">
+        //Get & filter arrivals
         $(function () {
             $("#bFilterArrivals").click(function (e) {
                 e.preventDefault();
                 var _form = $(this).closest("form");
+                viewer.ClearFeatures();
                 $.post('/Home/GetFilteredArrivals', _form.serialize(), function (res) {
                     $('#tArrivals').bootstrapTable('load', res)
+                    viewer.AddVectorLayer(res);
                 });
             });
         });
 
+        //Select row in arrivals table
         $('#tArrivals').on('click', 'tbody tr', function (event) {
             $(this).addClass('highlight').siblings().removeClass('highlight');
         });
+    </script>
+
+    <script type="text/javascript">
+        var airports = @Html.Raw(Json.Serialize(Model.WorldAirports));
+        var viewer = new olViewer();
+        viewer.Init('mapViewer', airports);
     </script>
 }

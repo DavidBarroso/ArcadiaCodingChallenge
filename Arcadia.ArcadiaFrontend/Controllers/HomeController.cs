@@ -36,7 +36,13 @@ namespace Arcadia.ArcadiaFrontend.Controllers
                     model = new IndexViewModel();
                 model.Begin = DateTime.Now;
                 model.End = DateTime.Now;
-                model.Airports = GetAirports();
+                model.WorldAirports = GetAirports();
+                model.Airports = model.WorldAirports.ToList().Where(x =>
+                {
+                    return !string.IsNullOrWhiteSpace(x.Name) && (x.Country == "Germany" || x.Country == "Spain");
+                }).OrderBy(x => x.Country).ThenBy(x => x.Name).ToList();
+
+
                 model.Arrivals = new List<Arrivals>();
 
                 return View(model);
@@ -57,7 +63,11 @@ namespace Arcadia.ArcadiaFrontend.Controllers
         {
             if (model == null)
                 model = new IndexViewModel();
-            model.Airports = GetAirports();
+            model.WorldAirports = GetAirports();
+            model.Airports = model.WorldAirports.ToList().Where(x =>
+            {
+                return !string.IsNullOrWhiteSpace(x.Name) && (x.Country == "Germany" || x.Country == "Spain");
+            }).OrderBy(x => x.Country).ThenBy(x => x.Name).ToList();
             List<Arrivals> arrivals = GetArrivals(model.SelectedAirport, model.Begin, model.End);
             model.Arrivals = arrivals;
 
