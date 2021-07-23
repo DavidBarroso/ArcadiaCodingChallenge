@@ -48,7 +48,7 @@
                 viewer.ClearFeatures();
                 $.post('/Home/GetFilteredArrivals', _form.serialize(), function (res) {
                     $('#tArrivals').bootstrapTable('load', res)
-                    viewer.AddFeatures(res);
+                    viewer.AddVectorLayer(res);
                 });
             });
         });
@@ -63,7 +63,5 @@
         var airports = @Html.Raw(Json.Serialize(Model.Airports));
         var viewer = new olViewer();
         viewer.Init('mapViewer', airports);
-        //var mapViewerObj = new olViewer('mapViewer'));
-        //mapViewerObj.Init();
     </script>
 }
