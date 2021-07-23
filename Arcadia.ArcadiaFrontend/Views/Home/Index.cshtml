@@ -60,7 +60,7 @@
     </script>
 
     <script type="text/javascript">
-        var airports = @Html.Raw(Json.Serialize(Model.Airports));
+        var airports = @Html.Raw(Json.Serialize(Model.WorldAirports));
         var viewer = new olViewer();
         viewer.Init('mapViewer', airports);
     </script>

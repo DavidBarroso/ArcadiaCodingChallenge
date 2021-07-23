@@ -25,11 +25,7 @@ namespace Arcadia.ArcadiaBackend.Controllers
             //string json = System.IO.File.ReadAllText("./Resources/airportsSP_DE.json");
             string json = System.IO.File.ReadAllText("./Resources/airports.json");
             Airport[] airports = RestClientFactory.GetData<Airport[]>(json);
-
-            return airports.ToList().Where(x =>
-            {
-                return !string.IsNullOrWhiteSpace(x.Name) && (x.Country == "Germany" || x.Country == "Spain");
-            }).OrderBy(x => x.Country).ThenBy(x => x.Name).ToArray();
+            return airports;
         }
     }
 }
