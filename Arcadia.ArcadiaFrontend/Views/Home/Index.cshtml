@@ -28,6 +28,14 @@
             <partial name="/Views/Controls/MapViewer.cshtml" />
         </div>
     </div>
+
+    <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="width: 48px">
+                <span class="fa fa-spinner fa-spin fa-3x">Loading...</span>
+            </div>
+        </div>
+    </div>
 }
 
 @section Styles {
@@ -44,12 +52,21 @@
         $(function () {
             $("#bFilterArrivals").click(function (e) {
                 e.preventDefault();
+                $('.modal').modal('show');
                 var _form = $(this).closest("form");
                 viewer.ClearFeatures();
                 $.post('/Home/GetFilteredArrivals', _form.serialize(), function (res) {
-                    $('#tArrivals').bootstrapTable('load', res)
-                    viewer.AddVectorLayer(res);
+                    try {
+                        $('#tArrivals').bootstrapTable('load', res)
+                        viewer.AddVectorLayer(res);
+                    }
+                    finally {
+                        $('.modal').modal('hide');
+                    }
                 });
+                setTimeout(function () {
+                    $('.modal').modal('hide');
+                }, 800);
             });
         });
 
