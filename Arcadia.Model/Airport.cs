@@ -24,7 +24,7 @@ namespace Arcadia.Model
         /// <value>
         /// The iata.
         /// </value>
-        public string Iata { get; set; }
+        public string Code { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -72,7 +72,7 @@ namespace Arcadia.Model
         /// <value>
         /// The elevation.
         /// </value>
-        public double Elevation { get; set; }
+        public string Elev { get; set; }
 
         /// <summary>
         /// Gets or sets the lat.
@@ -80,7 +80,23 @@ namespace Arcadia.Model
         /// <value>
         /// The lat.
         /// </value>
-        public double Lat { get; set; }
+        public string Lat { get; set; }
+
+        /// <summary>
+        /// Gets the latitude.
+        /// </summary>
+        /// <value>
+        /// The latitude.
+        /// </value>
+        public double Latitude
+        {
+            get
+            {
+                double latitude = -1;
+                Double.TryParse(this.Lat, out latitude);
+                return latitude;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the lon.
@@ -88,7 +104,23 @@ namespace Arcadia.Model
         /// <value>
         /// The lon.
         /// </value>
-        public double Lon { get; set; }
+        public string Lon { get; set; }
+
+        /// <summary>
+        /// Gets the longitude.
+        /// </summary>
+        /// <value>
+        /// The longitude.
+        /// </value>
+        public double Longitude
+        {
+            get
+            {
+                double longitude = -1;
+                Double.TryParse(this.Lon, out longitude);
+                return longitude;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tz.
