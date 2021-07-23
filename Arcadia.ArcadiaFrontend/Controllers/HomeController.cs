@@ -53,18 +53,15 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             return View();
         }
 
-        public IActionResult FilterArrivals(IndexViewModel model)
+        public List<Arrivals> GetFilteredArrivals(IndexViewModel model)
         {
             if (model == null)
                 model = new IndexViewModel();
             model.Airports = GetAirports();
             List<Arrivals> arrivals = GetArrivals(model.SelectedAirport, model.Begin, model.End);
-
-            //TODO: filter
-
             model.Arrivals = arrivals;
 
-            return PartialView("~/Views/Controls/ArrivalsFiltered.cshtml", model);
+            return arrivals;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
