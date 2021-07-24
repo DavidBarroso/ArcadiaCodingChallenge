@@ -53,20 +53,28 @@
             $("#bFilterArrivals").click(function (e) {
                 e.preventDefault();
                 $('.modal').modal('show');
-                var _form = $(this).closest("form");
-                viewer.ClearFeatures();
-                $.post('/Home/GetFilteredArrivals', _form.serialize(), function (res) {
-                    try {
-                        $('#tArrivals').bootstrapTable('load', res)
-                        viewer.AddVectorLayer(res);
-                    }
-                    finally {
+                try {
+                    var _form = $(this).closest("form");
+                    setTimeout(function () {
+                        viewer.ClearFeatures();
+                        $.ajax({
+                            url: '/Home/GetFilteredArrivals',
+                            timeout: 30000,
+                            data: _form.serialize(),
+                            success: function (response) {
+                                $('#tArrivals').bootstrapTable('load', response)
+                                viewer.AddVectorLayer(response);
+                            },
+                            error: function (response) {
+                                //TODO: Timeout
+                            }
+                        });
                         $('.modal').modal('hide');
-                    }
-                });
-                setTimeout(function () {
+                    }, 800);
+                }
+                finally {
                     $('.modal').modal('hide');
-                }, 800);
+                }
             });
         });
 
