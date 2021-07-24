@@ -19,7 +19,8 @@ olViewer.prototype.Init = (function (targetId, items) {
         view: new ol.View({
             projection: 'EPSG:3857',
             center: [0, 0],
-            zoom: 2
+            zoom: 2,
+            minZoom: 2
         })
     });
 });
@@ -30,18 +31,6 @@ olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
         return;
     
     var features = [];
-
-    //arrival feature
-    var arrivalFeature = this.CreateFeature(this.GetControlFeature("icao", jsonFeatures[0].estArrivalAirport));
-    arrivalFeature.setStyle(new ol.style.Style({
-        image: new ol.style.Circle({
-            fill: new ol.style.Fill({ color: '#4EE084' }),
-            stroke: new ol.style.Stroke({ color: '#008236', width: 1 }),
-            radius: 5
-        }),
-    }));
-    arrivalFeature.setId('arrivalFeature');
-    features.push(arrivalFeature);
 
     //departure features
     var index = 0;
@@ -57,6 +46,19 @@ olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
         }
     });
 
+    //arrival feature
+    var arrivalFeature = this.CreateFeature(this.GetControlFeature("icao", jsonFeatures[0].estArrivalAirport));
+    arrivalFeature.setStyle(new ol.style.Style({
+        image: new ol.style.Circle({
+            fill: new ol.style.Fill({ color: '#4EE084' }),
+            stroke: new ol.style.Stroke({ color: '#008236', width: 1 }),
+            radius: 5,
+            zIndex: 9999
+        }),
+    }));
+    arrivalFeature.setId('arrivalFeature');
+    features.push(arrivalFeature);
+
     //Vector layer
     var vectorSource = new ol.source.Vector({ features: features });
     vectorLayer = new ol.layer.Vector({
@@ -65,12 +67,15 @@ olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
             image: new ol.style.Circle({
                 fill: new ol.style.Fill({ color: '#8CB2FF' }),
                 stroke: new ol.style.Stroke({ color: '#306AFF', width: 1 }),
-                radius: 5
+                radius: 5,
+                zIndex : 9998
             }),
         })
     });
     map.addLayer(vectorLayer);
-    var test = vectorLayer.getSource().getFeatures();
+
+    //Center features
+    this.CenterFeatures(vectorLayer.getSource().getFeatures());
 });
 //Create ol feature to add to map
 olViewer.prototype.CreateFeature = (function (jsonObj) {
@@ -104,4 +109,20 @@ olViewer.prototype.ClearFeatures = (function () {
         vectorLayer = null;
     }
 
+});
+//Center features
+olViewer.prototype.CenterFeatures = (function (features) {
+    if (features == null || features.length < 1)
+        return;
+
+    var featuresExtent = features[0].getGeometry().getExtent();
+    for (var i = 1; i < features.length; i++) {
+        ol.extent.extend(featuresExtent, features[i].getGeometry().getExtent());
+    }
+
+    map.getView().fit(featuresExtent, {
+        size: map.getSize(),
+        padding: [10,10,10,10]
+    });
+    
 });
