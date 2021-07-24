@@ -22,7 +22,7 @@ namespace Arcadia.Model
         /// <value>
         /// The first seen.
         /// </value>
-        public int FirstSeen { get; set; }
+        public int? FirstSeen { get; set; }
 
         /// <summary>
         /// Gets or sets the est departure airport.
@@ -38,7 +38,7 @@ namespace Arcadia.Model
         /// <value>
         /// The last seen.
         /// </value>
-        public int LastSeen { get; set; }
+        public int? LastSeen { get; set; }
 
         /// <summary>
         /// Gets or sets the est arrival airport.
