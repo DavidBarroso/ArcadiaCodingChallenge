@@ -1,6 +1,8 @@
+using Arcadia.ArcadiaBackend.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,10 +27,11 @@ namespace Arcadia.ArcadiaBackend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMemoryCache cache)
         {
             if (env.IsDevelopment())
             {
@@ -43,6 +46,9 @@ namespace Arcadia.ArcadiaBackend
             {
                 endpoints.MapControllers();
             });
+
+            MemoryCacheEntryOptions entryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.NeverRemove);
+            cache.Set(ArcadiaUtils.AIRPORT_CACHE_KEY, ArcadiaUtils.GetWorldAirports());
         }
     }
 }

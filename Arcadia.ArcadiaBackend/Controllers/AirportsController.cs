@@ -1,7 +1,9 @@
 ﻿//using Arcadia.ArcadiaBackend.Utils;
+using Arcadia.ArcadiaBackend.Helpers;
 using Arcadia.Model;
 using Arcadia.RestClientUtils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +15,23 @@ namespace Arcadia.ArcadiaBackend.Controllers
     public class AirportsController : ControllerBase
     {
         private readonly ILogger<AirportsController> _logger;
+        private IMemoryCache _cache;
 
-        public AirportsController(ILogger<AirportsController> logger)
+        public AirportsController(ILogger<AirportsController> logger, IMemoryCache memoryCache)
         {
+            _cache = memoryCache;
             _logger = logger;
         }
 
         [HttpGet]
         public IEnumerable<Airport> Get()
         {
-            //string json = System.IO.File.ReadAllText("./Resources/airportsSP_DE.json");
-            string json = System.IO.File.ReadAllText("./Resources/airports.json");
-            Airport[] airports = RestClientFactory.GetData<Airport[]>(json);
+            Airport[] airports = _cache.Get<Airport[]>(ArcadiaUtils.AIRPORT_CACHE_KEY);
+            if(airports == null)
+            {
+                airports = ArcadiaUtils.GetWorldAirports();
+                _cache.Set(ArcadiaUtils.AIRPORT_CACHE_KEY, airports);
+            }
             return airports;
         }
     }

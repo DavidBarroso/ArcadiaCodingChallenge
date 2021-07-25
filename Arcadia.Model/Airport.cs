@@ -92,9 +92,10 @@ namespace Arcadia.Model
         {
             get
             {
-                double latitude = -1;
-                Double.TryParse(this.Lat, out latitude);
-                return latitude;
+                double latitude;
+                if (Double.TryParse(this.Lat, out latitude))
+                    return latitude;
+                return double.NaN;
             }
         }
 
@@ -116,9 +117,10 @@ namespace Arcadia.Model
         {
             get
             {
-                double longitude = -1;
-                Double.TryParse(this.Lon, out longitude);
-                return longitude;
+                double longitude;
+                if (Double.TryParse(this.Lon, out longitude))
+                    return longitude;
+                return double.NaN;
             }
         }
 
