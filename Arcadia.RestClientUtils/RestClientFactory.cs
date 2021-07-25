@@ -11,6 +11,13 @@ namespace Arcadia.RestClientUtils
     /// </summary>
     public static class RestClientFactory
     {
+        /// <summary>
+        /// Creates the rest client.
+        /// </summary>
+        /// <param name="host">The host.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
         public static RestClient CreateRestClient(string host, string userName = null, string password = null)
         {
             RestClient client = new RestClient(host);
@@ -57,12 +64,25 @@ namespace Arcadia.RestClientUtils
             return result;
         }
 
+        /// <summary>
+        /// Gets the data.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json">The json.</param>
+        /// <returns></returns>
         public static T GetData<T>(string json)
         {
             JsonSerializerOptions options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
             return GetData<T>(json, options);
         }
 
+        /// <summary>
+        /// Gets the data.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json">The json.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
         public static T GetData<T>(string json, JsonSerializerOptions options)
         {
             if (string.IsNullOrWhiteSpace(json))

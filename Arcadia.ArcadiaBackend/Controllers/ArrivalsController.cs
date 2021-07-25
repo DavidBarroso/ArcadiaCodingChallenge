@@ -40,7 +40,7 @@ namespace Arcadia.ArcadiaBackend.Controllers
         private IMemoryCache _cache;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArrivalsController"/> class.
+        /// Initializes a new instance of the <see cref="ArrivalsController" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="memoryCache">The memory cache.</param>

@@ -10,6 +10,7 @@ namespace Arcadia.Model
     /// </summary>
     /// <seealso cref="System.Collections.Generic.IEnumerable&lt;Arcadia.Model.Arrivals&gt;" />
     /// <seealso cref="System.Collections.Generic.IEnumerable&lt;Arcadia.Model.Arrivals&gt;" />
+    /// <seealso cref="System.Collections.Generic.IEnumerable&lt;Arcadia.Model.Arrivals&gt;" />
     [Serializable]
     public class ArrivalCollection: IEnumerable<Arrivals>
     {
@@ -128,8 +129,8 @@ namespace Arcadia.Model
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
-        /// <param name="lhs">The LHS.</param>
-        /// <param name="rhs">The RHS.</param>
+        /// <param name="item1">The item1.</param>
+        /// <param name="item2">The item2.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
@@ -143,6 +144,14 @@ namespace Arcadia.Model
                 return item2.Equals(item1);
         }
 
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="item1">The item1.</param>
+        /// <param name="item2">The item2.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator !=(ArrivalCollection item1, ArrivalCollection item2)
         {
             bool result = item1 == item2;
@@ -180,7 +189,7 @@ namespace Arcadia.Model
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {

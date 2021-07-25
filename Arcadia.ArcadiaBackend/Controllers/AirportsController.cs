@@ -10,19 +10,38 @@ using System.Linq;
 
 namespace Arcadia.ArcadiaBackend.Controllers
 {
+    /// <summary>
+    /// AirportsController
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [ApiController]
     [Route("[controller]")]
     public class AirportsController : ControllerBase
     {
+        /// <summary>
+        /// The logger
+        /// </summary>
         private readonly ILogger<AirportsController> _logger;
+        /// <summary>
+        /// The cache
+        /// </summary>
         private IMemoryCache _cache;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AirportsController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="memoryCache">The memory cache.</param>
         public AirportsController(ILogger<AirportsController> logger, IMemoryCache memoryCache)
         {
             _cache = memoryCache;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Gets this instance.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<Airport> Get()
         {

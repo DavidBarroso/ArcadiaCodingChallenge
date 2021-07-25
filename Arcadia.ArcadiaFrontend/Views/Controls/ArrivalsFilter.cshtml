@@ -1,15 +1,22 @@
 ﻿@model Arcadia.ArcadiaFrontend.Models.IndexViewModel
 <div class="editor-field">
     <div class="form-group">
-        <label for="SelectedAirport">Airport</label>
+        <label for="Countries" data-toggle="tooltip" data-placement="top" title="Countries separated by ','">Countries: </label>
+        @Html.TextBoxFor(m => m.Countries)
+    </div>
+    <input type="submit" class="btn btn-primary" id="bFilterAirports" value="Search airports" />
+
+    <hr />
+    <div class="form-group">
+        <label for="SelectedAirport">Airport: </label>
         @Html.DropDownListFor(m => m.SelectedAirport, new SelectList(Model.Airports, "Icao", "Name"))
     </div>
     <div class="form-group">
-        <label for="Begin">Begin date</label><br />
+        <label for="Begin">Begin date: </label><br />
         @Html.EditorFor(model => model.Begin, new { @type = "date", @class = "form-control datepicker", @Value = Model.Begin.ToString("dd/MM/yyyy hh:mm") })
     </div>
     <div class="form-group">
-        <label for="End">End date</label><br />
+        <label for="End">End date: </label><br />
         @Html.EditorFor(model => model.End, new { @type = "date", @class = "form-control datepicker", @Value = Model.End.ToString("dd/MM/yyyy hh:mm") })
     </div>
 </div>

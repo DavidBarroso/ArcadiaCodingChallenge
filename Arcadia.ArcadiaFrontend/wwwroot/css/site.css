@@ -87,3 +87,10 @@ body {
     background-color: transparent;
     border: none;
 }
+
+.form-container {
+    border: 1px solid #CED4DA;
+    border-radius: 5px;
+    padding: 0.8em;
+}
+
