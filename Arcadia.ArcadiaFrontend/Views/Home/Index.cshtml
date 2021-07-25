@@ -91,7 +91,7 @@
                 var keys = ['estDepartureAirport', 'callsign'];
                 var values = [departureICAO, callsign];
                 var arrivalJson = viewer.GetArrival(keys, values);
-                viewer.OpenPopup(arrivalJson, $('#popup-content'));
+                viewer.OpenPopup(arrivalJson);
             }
             
         });
@@ -106,6 +106,6 @@
         //Init map viewer
         var airports = @Html.Raw(Json.Serialize(Model.WorldAirports));
         var viewer = new olViewer();
-        viewer.Init('mapViewer', $("#popup").get(0), airports);
+        viewer.Init('mapViewer', $("#popup").get(0), $('#popup-content'), airports);
     </script>
 }
