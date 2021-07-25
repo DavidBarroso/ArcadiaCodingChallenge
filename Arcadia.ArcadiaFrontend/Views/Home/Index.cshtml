@@ -97,8 +97,10 @@
         });
 
         //Close popup
-        $('#popup-closer').on('click', 'a', function (event) {
+        $('#aPopupCloser').click(function (e) {
+            e.preventDefault();
             viewer.ClosePopup();
+            return false;
         });
 
         //Init map viewer
