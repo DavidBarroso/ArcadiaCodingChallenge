@@ -84,8 +84,10 @@
             viewer.ClosePopup();
             row.addClass('highlight').siblings().removeClass('highlight');
             if (row.hasClass("highlight")) {
-                var departureICAO = row.find("td:eq(1)").text();
-                var callsign = row.find("td:eq(2)").text();
+                //var departureICAO = row.find("td:eq(1)").text();
+                //var callsign = row.find("td:eq(2)").text();
+                var departureICAO = row.find("td:eq(0)").text();
+                var callsign = row.find("td:eq(1)").text();
                 var keys = ['estDepartureAirport', 'callsign'];
                 var values = [departureICAO, callsign];
                 var arrivalJson = viewer.GetArrival(keys, values);
