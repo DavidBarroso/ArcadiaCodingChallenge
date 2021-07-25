@@ -3,12 +3,11 @@ using Arcadia.Model;
 using Arcadia.RestClientUtils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Arcadia.ArcadiaBackend.Controllers
 {
@@ -21,33 +20,31 @@ namespace Arcadia.ArcadiaBackend.Controllers
     public class ArrivalsController : ControllerBase
     {
         /// <summary>
-        /// The host
+        /// The configuration
         /// </summary>
-        private const string HOST = "https://opensky-network.org/api";
-        /// <summary>
-        /// The arrivals resource
-        /// </summary>
-        private const string ARRIVALS_RESOURCE = "/flights/arrival";
-
+        private readonly IConfiguration _configuration;
 
         /// <summary>
         /// The logger
         /// </summary>
         private readonly ILogger<ArrivalsController> _logger;
+
         /// <summary>
         /// The cache
         /// </summary>
-        private IMemoryCache _cache;
+        private readonly IMemoryCache _cache;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArrivalsController" /> class.
+        /// Initializes a new instance of the <see cref="ArrivalsController"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="memoryCache">The memory cache.</param>
-        public ArrivalsController(ILogger<ArrivalsController> logger, IMemoryCache memoryCache)
+        /// <param name="configuration">The configuration.</param>
+        public ArrivalsController(ILogger<ArrivalsController> logger, IMemoryCache memoryCache, IConfiguration configuration)
         {
             _cache = memoryCache;
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -63,19 +60,23 @@ namespace Arcadia.ArcadiaBackend.Controllers
             //Get all airports
             Airport[] airports = _cache.Get<Airport[]>(ArcadiaUtils.AIRPORT_CACHE_KEY);
 
-            ////MockRQ
-            //icao = "EDDF";
-            //begin = "1517227200";
-            //end = "1517230800";
-            ////END MockRQ
+            //Open sky config settings
+            string host = _configuration.GetValue<string>("OpenSkyRestAPIConfiguration:Host", "https://opensky-network.org/api");
+            string userName = _configuration.GetValue<string>("OpenSkyRestAPIConfiguration:UserName", null);
+            string pass = _configuration.GetValue<string>("OpenSkyRestAPIConfiguration:Pass", null);
+            string arrivalResource = _configuration.GetValue<string>("OpenSkyRestAPIConfiguration:ArrivalResource", "/flights/arrival");
 
+            //Request params
             KeyValuePair<string, object> param1 = new KeyValuePair<string, object>("airport", icao);
             KeyValuePair<string, object> param2 = new KeyValuePair<string, object>("begin", begin);
             KeyValuePair<string, object> param3 = new KeyValuePair<string, object>("end", end);
 
-            RestClient client = RestClientFactory.CreateRestClient(HOST, "DavidBarroso", "AirbusTest");
-            RestRequest rq = RestClientFactory.CreateRestRequest(ARRIVALS_RESOURCE, Method.GET, DataFormat.Json, param1, param2, param3);
+            //Request
+            RestClient client = RestClientFactory.CreateRestClient(host, userName, pass);
+            RestRequest rq = RestClientFactory.CreateRestRequest(arrivalResource, Method.GET, DataFormat.Json, param1, param2, param3);
             IRestResponse rs = client.Get(rq);
+
+            //Response
             if (rs.StatusCode == System.Net.HttpStatusCode.OK && rs.ContentType.ToLower().Contains("json"))
             {
                 Arrivals[] arrivals = RestClientFactory.GetData<Arrivals[]>(rs.Content);
@@ -87,28 +88,7 @@ namespace Arcadia.ArcadiaBackend.Controllers
                 return arrivals;
             }
             return null;
-
-            ////MOCK DATA
-            //var random = new Random();
-            //return Enumerable.Range(1, 5).Select(index => new Arrivals
-            //{
-            //    Icao24 = Guid.NewGuid().ToString(),
-            //    FirstSeen = random.Next(),
-            //    EstDepartureAirport = Guid.NewGuid().ToString(),
-            //    LastSeen = random.Next(),
-            //    EstArrivalAirport = Guid.NewGuid().ToString(),
-            //    Callsign = Guid.NewGuid().ToString(),
-            //    EstDepartureAirportHorizDistance = random.Next(),
-            //    EstDepartureAirportVertDistance = random.Next(),
-            //    EstArrivalAirportHorizDistance = random.Next(),
-            //    EstArrivalAirportVertDistance = random.Next(),
-            //    DepartureAirportCandidatesCount = random.Next(),
-            //    ArrivalAirportCandidatesCount = random.Next()
-            //})
-            //.ToArray();
-            //END MOCK DATA
         }
-
 
         /// <summary>
         /// Calculates the distance from departure airport.

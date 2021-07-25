@@ -22,10 +22,9 @@ namespace Arcadia.ArcadiaBackend.Helpers
         /// Gets the world airports.
         /// </summary>
         /// <returns></returns>
-        public static Airport[] GetWorldAirports()
+        public static Airport[] GetWorldAirports(string filePath)
         {
-            //string json = System.IO.File.ReadAllText("./Resources/airportsSP_DE.json");
-            string json = System.IO.File.ReadAllText("./Resources/airports.json");
+            string json = System.IO.File.ReadAllText(filePath);
             Airport[] airports = RestClientFactory.GetData<Airport[]>(json);
             return airports;
         }
