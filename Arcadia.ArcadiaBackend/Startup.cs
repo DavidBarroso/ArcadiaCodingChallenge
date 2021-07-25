@@ -69,9 +69,6 @@ namespace Arcadia.ArcadiaBackend
             {
                 endpoints.MapControllers();
             });
-
-            MemoryCacheEntryOptions entryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.NeverRemove);
-            cache.Set(ArcadiaUtils.AIRPORT_CACHE_KEY, ArcadiaUtils.GetWorldAirports());
         }
     }
 }
