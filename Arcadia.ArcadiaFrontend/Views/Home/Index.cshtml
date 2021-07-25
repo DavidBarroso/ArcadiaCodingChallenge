@@ -80,13 +80,30 @@
 
         //Select row in arrivals table
         $('#tArrivals').on('click', 'tbody tr', function (event) {
-            $(this).addClass('highlight').siblings().removeClass('highlight');
+            var row = $(this);
+            viewer.ClosePopup();
+            row.addClass('highlight').siblings().removeClass('highlight');
+            if (row.hasClass("highlight")) {
+                //var departureICAO = row.find("td:eq(1)").text();
+                //var callsign = row.find("td:eq(2)").text();
+                var departureICAO = row.find("td:eq(0)").text();
+                var callsign = row.find("td:eq(1)").text();
+                var keys = ['estDepartureAirport', 'callsign'];
+                var values = [departureICAO, callsign];
+                var arrivalJson = viewer.GetArrival(keys, values);
+                viewer.OpenPopup(arrivalJson, $('#popup-content'));
+            }
+            
         });
-    </script>
 
-    <script type="text/javascript">
+        //Close popup
+        $('#popup-closer').on('click', 'a', function (event) {
+            viewer.ClosePopup();
+        });
+
+        //Init map viewer
         var airports = @Html.Raw(Json.Serialize(Model.WorldAirports));
         var viewer = new olViewer();
-        viewer.Init('mapViewer', airports);
+        viewer.Init('mapViewer', $("#popup").get(0), airports);
     </script>
 }

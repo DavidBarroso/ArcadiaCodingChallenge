@@ -2,20 +2,35 @@
 var olViewer = (function () {
     var map = null;
     var vectorLayer = null;
-    var controlFeatures = null;
+    var airports = null;
+    var overlay = null;
+    var arrivals = null;
 });
 //Init map function
-olViewer.prototype.Init = (function (targetId, items) {
+olViewer.prototype.Init = (function (targetId, popupContainer, items) {
     //Save airports
-    controlFeatures = items;
+    airports = items;
+
+    //Init arrivals
+    arrivals = null;
 
     //Init layer
     vectorLayer = null;
+
+    //Init popup
+    overlay = new ol.Overlay({
+        element: popupContainer,
+        autoPan: true,
+        autoPanAnimation: {
+            duration: 250,
+        },
+    });
 
     //Load map viewer
     map = new ol.Map({
         target: targetId,
         layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
+        overlays: [overlay],
         view: new ol.View({
             projection: 'EPSG:3857',
             center: [0, 0],
@@ -26,6 +41,7 @@ olViewer.prototype.Init = (function (targetId, items) {
 });
 //Add arrival airport and departures airport to vector layer
 olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
+    arrivals = jsonFeatures;
     this.ClearFeatures();
     if (jsonFeatures == null || jsonFeatures.length < 1)
         return;
@@ -36,7 +52,7 @@ olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
     var index = 0;
     jsonFeatures.forEach((value) => {
         if (value != null) {
-            var departureJSONObj = this.GetControlFeature("icao", value.estDepartureAirport);
+            var departureJSONObj = this.GetAirport("icao", value.estDepartureAirport);
             if (departureJSONObj != null) {
                 var departureFeature = this.CreateFeature(departureJSONObj);
                 departureFeature.setId('departureFeature' + index);
@@ -47,7 +63,7 @@ olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
     });
 
     //arrival feature
-    var arrivalFeature = this.CreateFeature(this.GetControlFeature("icao", jsonFeatures[0].estArrivalAirport));
+    var arrivalFeature = this.CreateFeature(this.GetAirport("icao", jsonFeatures[0].estArrivalAirport));
     arrivalFeature.setStyle(new ol.style.Style({
         image: new ol.style.Circle({
             fill: new ol.style.Fill({ color: '#4EE084' }),
@@ -93,11 +109,28 @@ olViewer.prototype.CreateFeature = (function (jsonObj) {
     return feature;
 });
 //Get airport feature
-olViewer.prototype.GetControlFeature = (function (key, value) {
-    for (var i = 0; i < controlFeatures.length; i++) {
-        var candidate = controlFeatures[i];
+olViewer.prototype.GetAirport = (function (key, value) {
+    for (var i = 0; i < airports.length; i++) {
+        var candidate = airports[i];
         if (candidate[key] == value) {
             return candidate;
+        }
+    }
+    return null;
+});
+//Filtered airport feature
+olViewer.prototype.GetArrival = (function (keys, values) {
+    if (keys != null && values != null && keys.length == values.length) {
+        for (var i = 0; i < arrivals.length; i++) {
+            var candidate = arrivals[i];
+            var allKeysIsTrue = true;
+            for (var j = 0; j < keys.length; j++) {
+                if (candidate[keys[j]] != values[j]) {
+                    allKeysIsTrue = false;
+                }
+            }
+            if (allKeysIsTrue)
+                return candidate;
         }
     }
     return null;
@@ -125,4 +158,26 @@ olViewer.prototype.CenterFeatures = (function (features) {
         padding: [10,10,10,10]
     });
     
+});
+//Open popup
+olViewer.prototype.OpenPopup = (function (arrival, contentContainer) {
+    var airport = this.GetAirport("icao", arrival.estDepartureAirport)
+    var lon = parseFloat(airport.longitude);
+    var lat = parseFloat(airport.latitude);
+    var coordinates = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+
+    var contentTxt = '';
+    for (var key in arrival) {
+        var value = arrival[key];
+        if (value != "")
+            contentTxt += (key + ': ' + arrival[key] + "\n");
+    }
+    contentContainer.text(contentTxt);
+
+    overlay.setPosition(coordinates);
+
+});
+//Close popup
+olViewer.prototype.ClosePopup = (function () {
+    overlay.setPosition(undefined);
 });
