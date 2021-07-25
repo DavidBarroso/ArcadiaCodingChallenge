@@ -21,7 +21,7 @@ namespace Arcadia.ArcadiaBackend.Helpers
         public const double TO_RAD = Math.PI / 180;
 
         /// <summary>
-        /// Gets the distance. 
+        /// Gets the distance.
         /// Using Haversine formula to calculate distance and assuming that the longitudes and latitudes are in geographic system (WGS84/EPSG:4623)
         /// </summary>
         /// <param name="lat1">The lat1.</param>

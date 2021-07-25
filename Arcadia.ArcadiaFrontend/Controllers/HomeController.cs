@@ -13,21 +13,52 @@ using Arcadia.RestClientUtils;
 
 namespace Arcadia.ArcadiaFrontend.Controllers
 {
+    /// <summary>
+    /// HomeController
+    /// </summary>
+    /// <seealso cref="Arcadia.ArcadiaFrontend.Controllers.BaseClientController" />
     public class HomeController : BaseClientController
     {
+        /// <summary>
+        /// The logger
+        /// </summary>
         private readonly ILogger<HomeController> _logger;
 
+        /// <summary>
+        /// The host
+        /// </summary>
         private const string HOST = "http://arcadia.arcadiabackend";
+        /// <summary>
+        /// The arrivals resource
+        /// </summary>
         private const string ARRIVALS_RESOURCE = "arrivals";
+        /// <summary>
+        /// The airports resource
+        /// </summary>
         private const string AIRPORTS_RESOURCE = "airports";
+        /// <summary>
+        /// The session key airports
+        /// </summary>
         private const string SESSION_KEY_AIRPORTS = "AIRPORTS";
+        /// <summary>
+        /// The session key arrivals
+        /// </summary>
         private const string SESSION_KEY_ARRIVALS = "ARRIVALS";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
+        /// <summary>
+        /// Indexes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         public IActionResult Index(IndexViewModel model)
         {
             try
@@ -54,11 +85,20 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             }
         }
 
+        /// <summary>
+        /// Privacies this instance.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Privacy()
         {
             return View();
         }
 
+        /// <summary>
+        /// Gets the filtered arrivals.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         public List<Arrivals> GetFilteredArrivals(IndexViewModel model)
         {
             if (model == null)
@@ -74,6 +114,10 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             return arrivals;
         }
 
+        /// <summary>
+        /// Errors this instance.
+        /// </summary>
+        /// <returns></returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -81,6 +125,10 @@ namespace Arcadia.ArcadiaFrontend.Controllers
         }
 
 
+        /// <summary>
+        /// Gets the airports.
+        /// </summary>
+        /// <returns></returns>
         private List<Airport> GetAirports()
         {
             List<Airport> airportsInCache = HttpContext.Session.GetFromSession<List<Airport>>(SESSION_KEY_AIRPORTS);
@@ -105,6 +153,13 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             return airportsInCache;
         }
 
+        /// <summary>
+        /// Gets the arrivals.
+        /// </summary>
+        /// <param name="icao">The icao.</param>
+        /// <param name="begin">The begin.</param>
+        /// <param name="end">The end.</param>
+        /// <returns></returns>
         private List<Arrivals> GetArrivals(string icao, DateTime begin, DateTime end)
         {
             

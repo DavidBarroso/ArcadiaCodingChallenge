@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Arcadia.ArcadiaBackend.Helpers
 {
     /// <summary>
-    ///ArcadiaUtils
+    /// ArcadiaUtils
     /// </summary>
     public static class ArcadiaUtils
     {

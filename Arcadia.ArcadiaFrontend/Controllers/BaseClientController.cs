@@ -24,9 +24,8 @@ namespace Arcadia.ArcadiaFrontend.Controllers
         protected RestClient client;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseClientController"/> class.
+        /// Initializes a new instance of the <see cref="BaseClientController" /> class.
         /// </summary>
-        /// <param name="host">The host.</param>
         public BaseClientController()
         {
             this.host = "http://localhost:49161";

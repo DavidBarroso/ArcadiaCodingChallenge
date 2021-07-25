@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Arcadia.ArcadiaFrontend.Extensions
 {
+    /// <summary>
+    /// SessionExtension
+    /// </summary>
     public static class SessionExtension
     {
         /// <summary>
