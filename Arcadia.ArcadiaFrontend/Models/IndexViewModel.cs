@@ -14,6 +14,14 @@ namespace Arcadia.ArcadiaFrontend.Models
     public class IndexViewModel
     {
         /// <summary>
+        /// Gets or sets the countries.
+        /// </summary>
+        /// <value>
+        /// The countries.
+        /// </value>
+        public string Countries { get; set; }
+
+        /// <summary>
         /// Gets or sets the selected airport.
         /// </summary>
         /// <value>

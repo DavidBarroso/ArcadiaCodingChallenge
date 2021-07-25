@@ -65,13 +65,12 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             {
                 if (model == null)
                     model = new IndexViewModel();
+                if (string.IsNullOrWhiteSpace(model.Countries))
+                    model.Countries = "Spain, Germany";
                 model.Begin = DateTime.Now;
                 model.End = DateTime.Now;
                 model.WorldAirports = GetAirports();
-                model.Airports = model.WorldAirports.ToList().Where(x =>
-                {
-                    return !string.IsNullOrWhiteSpace(x.Name) && (x.Country == "Germany" || x.Country == "Spain");
-                }).OrderBy(x => x.Country).ThenBy(x => x.Name).ToList();
+                model.Airports = GetFilteredAirports(model.WorldAirports, model.Countries.Split(','));
 
 
                 model.Arrivals = new List<Arrivals>();
@@ -151,6 +150,24 @@ namespace Arcadia.ArcadiaFrontend.Controllers
                 }
             }
             return airportsInCache;
+        }
+
+        /// <summary>
+        /// Gets the filtered airports.
+        /// </summary>
+        /// <param name="airports">The airports.</param>
+        /// <param name="countries">The countries.</param>
+        /// <returns></returns>
+        private List<Airport> GetFilteredAirports(List<Airport> airports, params string[] countries)
+        {
+            if (countries == null || !countries.Any())
+                return new List<Airport>();
+
+            return airports.Where(x =>
+            {
+                return !string.IsNullOrWhiteSpace(x.Name) && countries.ToList().Exists(y => string.Equals(x.Country.Trim(), y.Trim(), StringComparison.InvariantCultureIgnoreCase));
+
+            }).OrderBy(x => x.Country).ThenBy(x => x.Name).ToList();
         }
 
         /// <summary>
