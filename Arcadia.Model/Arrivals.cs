@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Arcadia.Model
 {
@@ -104,5 +105,13 @@ namespace Arcadia.Model
         /// </value>
         public int? ArrivalAirportCandidatesCount { get; set; }
 
+        /// <summary>
+        /// Gets or sets the distance to departure airport.
+        /// </summary>
+        /// <value>
+        /// The distance to departure airport.
+        /// </value>
+        [DisplayFormat(DataFormatString = "{0:F3}")]
+        public double? DistanceToDepartureAirport { get; set; }
     }
 }
