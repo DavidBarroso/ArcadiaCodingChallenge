@@ -161,21 +161,72 @@ olViewer.prototype.CenterFeatures = (function (features) {
 });
 //Open popup
 olViewer.prototype.OpenPopup = (function (arrival, contentContainer) {
-    var airport = this.GetAirport("icao", arrival.estDepartureAirport)
-    var lon = parseFloat(airport.longitude);
-    var lat = parseFloat(airport.latitude);
+    var dAirport = this.GetAirport("icao", arrival.estDepartureAirport)
+    var aAirport = this.GetAirport("icao", arrival.estArrivalAirport)
+
+    var contentPopup = this.GetContentPopup(arrival, dAirport, aAirport);
+    contentContainer.html(contentPopup);
+
+    var lon = parseFloat(dAirport.longitude);
+    var lat = parseFloat(dAirport.latitude);
     var coordinates = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
-
-    var contentTxt = '';
-    for (var key in arrival) {
-        var value = arrival[key];
-        if (value != "")
-            contentTxt += (key + ': ' + arrival[key] + "\n");
-    }
-    contentContainer.text(contentTxt);
-
     overlay.setPosition(coordinates);
+});
+//Generate content pop up
+olViewer.prototype.GetContentPopup = (function (arrival, dAirport, aAirport) {
+    var baseContent = `<table>
+                           <tr>
+                               <td colspan="3" class="ol-popop-td">
+                                   <b>Flight</b></br>
+                                   ICAO-24bit: {icao24}</br>
+                                   Callsign: {callsign}</br>
+                                   Distance: {distance} km</br>
+                               </td>
+                           </tr>
+                           <tr>
+                               <td class="ol-popop-td">
+                                   <b>Departure Airport</b></br>
+                                   ICAO: {dICAO}</br>
+                                   Name: {dIATAName}</br>
+                                   Address: {dCountry} {dState} {dCity}</br>
+                                   Coordinates: [{dLon},{dLat}]</br>
+                                   Elevation: {dElevation} m
+                               </td>
+                               <td style="width:0.5rem"></td>
+                               <td class="ol-popop-td">
+                                   <b>Arrival Airport</b></br>
+                                   ICAO: {aICAO}</br>
+                                   Name: {aIATAName}</br>
+                                   Address: {aCountry} {aState} {aCity}</br>
+                                   Coordinates: [{aLon},{aLat}]</br>
+                                   Elevation: {aElevation} m
+                               </td>
+                           </tr>
+                       </table>`;
 
+    baseContent = baseContent.replace('{icao24}', arrival.icao24);
+    baseContent = baseContent.replace('{callsign}', arrival.callsign);
+    baseContent = baseContent.replace('{distance}', Math.round((arrival.distanceToDepartureAirport + Number.EPSILON) * 100) / 100);
+
+    baseContent = baseContent.replace('{dICAO}', dAirport.icao);
+    baseContent = baseContent.replace('{dIATAName}', dAirport.name);
+    baseContent = baseContent.replace('{dCountry}', dAirport.country);
+    baseContent = baseContent.replace('{dState}', dAirport.state);
+    baseContent = baseContent.replace('{dCity}', dAirport.city);
+    baseContent = baseContent.replace('{dLon}', Math.round((dAirport.longitude + Number.EPSILON) * 1000) / 1000);
+    baseContent = baseContent.replace('{dLat}', Math.round((dAirport.latitude + Number.EPSILON) * 1000) / 1000);
+    baseContent = baseContent.replace('{dElevation}', Math.round((dAirport.elev + Number.EPSILON) * 1000) / 1000);
+
+    baseContent = baseContent.replace('{aICAO}', aAirport.icao);
+    baseContent = baseContent.replace('{aIATAName}', aAirport.name);
+    baseContent = baseContent.replace('{aCountry}', aAirport.country);
+    baseContent = baseContent.replace('{aState}', aAirport.state);
+    baseContent = baseContent.replace('{aCity}', aAirport.city);
+    baseContent = baseContent.replace('{aLon}', Math.round((aAirport.longitude + Number.EPSILON) * 1000) / 1000);
+    baseContent = baseContent.replace('{aLat}', Math.round((aAirport.latitude + Number.EPSILON) * 1000) / 1000);
+    baseContent = baseContent.replace('{aElevation}', Math.round((aAirport.elev + Number.EPSILON) * 1000) / 1000);
+
+    return baseContent;
 });
 //Close popup
 olViewer.prototype.ClosePopup = (function () {
