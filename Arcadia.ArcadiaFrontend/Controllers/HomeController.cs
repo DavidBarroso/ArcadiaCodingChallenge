@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using RestSharp;
 using Arcadia.RestClientUtils;
-
+using Microsoft.Extensions.Configuration;
 
 namespace Arcadia.ArcadiaFrontend.Controllers
 {
@@ -19,27 +19,18 @@ namespace Arcadia.ArcadiaFrontend.Controllers
     /// <seealso cref="Arcadia.ArcadiaFrontend.Controllers.BaseClientController" />
     public class HomeController : BaseClientController
     {
+        private readonly IConfiguration _configuration;
+
         /// <summary>
         /// The logger
         /// </summary>
         private readonly ILogger<HomeController> _logger;
 
         /// <summary>
-        /// The host
-        /// </summary>
-        private const string HOST = "http://arcadia.arcadiabackend";
-        /// <summary>
-        /// The arrivals resource
-        /// </summary>
-        private const string ARRIVALS_RESOURCE = "arrivals";
-        /// <summary>
-        /// The airports resource
-        /// </summary>
-        private const string AIRPORTS_RESOURCE = "airports";
-        /// <summary>
         /// The session key airports
         /// </summary>
         private const string SESSION_KEY_AIRPORTS = "AIRPORTS";
+
         /// <summary>
         /// The session key arrivals
         /// </summary>
@@ -49,9 +40,11 @@ namespace Arcadia.ArcadiaFrontend.Controllers
         /// Initializes a new instance of the <see cref="HomeController"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public HomeController(ILogger<HomeController> logger)
+        /// <param name="configuration">The configuration.</param>
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -66,7 +59,7 @@ namespace Arcadia.ArcadiaFrontend.Controllers
                 if (model == null)
                     model = new IndexViewModel();
                 if (string.IsNullOrWhiteSpace(model.Countries))
-                    model.Countries = "Spain, Germany";
+                    model.Countries = _configuration.GetValue<string>("ArcadiaBackend:AirportInitCountries", "Spain, Germany");
                 model.Begin = DateTime.Now;
                 model.End = DateTime.Now;
                 model.WorldAirports = GetAirports();
@@ -100,17 +93,24 @@ namespace Arcadia.ArcadiaFrontend.Controllers
         /// <returns></returns>
         public List<Arrivals> GetFilteredArrivals(IndexViewModel model)
         {
-            if (model == null)
-                model = new IndexViewModel();
-            model.WorldAirports = GetAirports();
-            model.Airports = model.WorldAirports.ToList().Where(x =>
+            try
             {
-                return !string.IsNullOrWhiteSpace(x.Name) && (x.Country == "Germany" || x.Country == "Spain");
-            }).OrderBy(x => x.Country).ThenBy(x => x.Name).ToList();
-            List<Arrivals> arrivals = GetArrivals(model.SelectedAirport, model.Begin, model.End);
-            model.Arrivals = arrivals;
+                if (model == null)
+                    model = new IndexViewModel();
+                if (string.IsNullOrWhiteSpace(model.Countries))
+                    model.Countries = _configuration.GetValue<string>("ArcadiaBackend:AirportInitCountries", "Spain, Germany");
+                model.WorldAirports = GetAirports();
+                model.Airports = GetFilteredAirports(model.WorldAirports, model.Countries.Split(','));
+                List<Arrivals> arrivals = GetArrivals(model.SelectedAirport, model.Begin, model.End);
+                model.Arrivals = arrivals;
 
-            return arrivals;
+                return arrivals;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in HomeController - GetFilteredArrivals");
+                return null;
+            }
         }
 
         /// <summary>
@@ -123,7 +123,6 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
         /// <summary>
         /// Gets the airports.
         /// </summary>
@@ -133,8 +132,11 @@ namespace Arcadia.ArcadiaFrontend.Controllers
             List<Airport> airportsInCache = HttpContext.Session.GetFromSession<List<Airport>>(SESSION_KEY_AIRPORTS);
             if (airportsInCache == null)
             {
-                RestClient client = RestClientFactory.CreateRestClient(HOST);
-                RestRequest rq = RestClientFactory.CreateRestRequest(AIRPORTS_RESOURCE, Method.GET, DataFormat.Json);
+                string backedHost = _configuration.GetValue<string>("ArcadiaBackend:Host", "http://arcadia.arcadiabackend");
+                string airportResource = _configuration.GetValue<string>("ArcadiaBackend:AirportResource", "airports");
+
+                RestClient client = RestClientFactory.CreateRestClient(backedHost);
+                RestRequest rq = RestClientFactory.CreateRestRequest(airportResource, Method.GET, DataFormat.Json);
                 IRestResponse rs = client.Get(rq);
                 Airport[] airports = null;
                 if (rs.StatusCode == System.Net.HttpStatusCode.OK && rs.ContentType.ToLower().Contains("json"))
@@ -189,13 +191,16 @@ namespace Arcadia.ArcadiaFrontend.Controllers
                                                                             string.Equals(endUnixFormat, arrivalsInCache.End);
             if (!sameArrivalsCollection)
             {
-                RestClient client = RestClientFactory.CreateRestClient(HOST);
+                string backedHost = _configuration.GetValue<string>("ArcadiaBackend:Host", "http://arcadia.arcadiabackend");
+                string arrivalResource = _configuration.GetValue<string>("ArcadiaBackend:ArrivalResource", "arrivals");
+
+                RestClient client = RestClientFactory.CreateRestClient(backedHost);
 
                 KeyValuePair<string, object> icaoParam = new KeyValuePair<string, object>("icao", icao);
                 KeyValuePair<string, object> beginParam = new KeyValuePair<string, object>("begin", beginUnixFormat);
                 KeyValuePair<string, object> endParam = new KeyValuePair<string, object>("end", endUnixFormat);
 
-                RestRequest rq = RestClientFactory.CreateRestRequest(ARRIVALS_RESOURCE, Method.GET, DataFormat.Json, icaoParam, beginParam, endParam);
+                RestRequest rq = RestClientFactory.CreateRestRequest(arrivalResource, Method.GET, DataFormat.Json, icaoParam, beginParam, endParam);
                 IRestResponse rs = client.Get(rq);
 
                 List<Arrivals> arrivals = null;
