@@ -5,9 +5,10 @@ var olViewer = (function () {
     var airports = null;
     var overlay = null;
     var arrivals = null;
+    var popupContentContainer = null;
 });
 //Init map function
-olViewer.prototype.Init = (function (targetId, popupContainer, items) {
+olViewer.prototype.Init = (function (targetId, popupContainer, popupContentObj, items) {
     //Save airports
     airports = items;
 
@@ -16,6 +17,9 @@ olViewer.prototype.Init = (function (targetId, popupContainer, items) {
 
     //Init layer
     vectorLayer = null;
+
+    //Init popup
+    popupContentContainer = popupContentObj
 
     //Init popup
     overlay = new ol.Overlay({
@@ -38,6 +42,17 @@ olViewer.prototype.Init = (function (targetId, popupContainer, items) {
             minZoom: 2
         })
     });
+
+    //Open popup hover feature
+    var that = this;
+    map.on('pointermove', function (e) {
+        map.forEachFeatureAtPixel(e.pixel, function (f) {
+            var arrivalJSON = f.get('arrivalJSON');
+            var coordinates = f.getGeometry().getCoordinates();
+            that.OpenPopup(arrivalJSON, coordinates);
+            return true;
+        });
+    });
 });
 //Add arrival airport and departures airport to vector layer
 olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
@@ -56,6 +71,7 @@ olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
             if (departureJSONObj != null) {
                 var departureFeature = this.CreateFeature(departureJSONObj);
                 departureFeature.setId('departureFeature' + index);
+                departureFeature.set('arrivalJSON', value);
                 features.push(departureFeature);
                 index++;
             }
@@ -64,6 +80,7 @@ olViewer.prototype.AddVectorLayer = (function (jsonFeatures) {
 
     //arrival feature
     var arrivalFeature = this.CreateFeature(this.GetAirport("icao", jsonFeatures[0].estArrivalAirport));
+    arrivalFeature.set('arrivalJSON', jsonFeatures[0]);
     arrivalFeature.setStyle(new ol.style.Style({
         image: new ol.style.Circle({
             fill: new ol.style.Fill({ color: '#4EE084' }),
@@ -160,16 +177,18 @@ olViewer.prototype.CenterFeatures = (function (features) {
     
 });
 //Open popup
-olViewer.prototype.OpenPopup = (function (arrival, contentContainer) {
+olViewer.prototype.OpenPopup = (function (arrival, coordinates) {
     var dAirport = this.GetAirport("icao", arrival.estDepartureAirport)
     var aAirport = this.GetAirport("icao", arrival.estArrivalAirport)
 
-    var contentPopup = this.GetContentPopup(arrival, dAirport, aAirport);
-    contentContainer.html(contentPopup);
+    var contentPopupHtml = this.GetContentPopup(arrival, dAirport, aAirport);
+    popupContentContainer.html(contentPopupHtml);
 
-    var lon = parseFloat(dAirport.longitude);
-    var lat = parseFloat(dAirport.latitude);
-    var coordinates = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+    if (typeof coordinates === 'undefined') {
+        var lon = parseFloat(dAirport.longitude);
+        var lat = parseFloat(dAirport.latitude);
+        coordinates = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+    }
     overlay.setPosition(coordinates);
 });
 //Generate content pop up
