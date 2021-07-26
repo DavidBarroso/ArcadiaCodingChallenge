@@ -6,6 +6,7 @@ var olViewer = (function () {
     var overlay = null;
     var arrivals = null;
     var popupContentContainer = null;
+    var routeLayer = null;
 });
 //Init map function
 olViewer.prototype.Init = (function (targetId, popupContainer, popupContentObj, items) {
@@ -15,8 +16,9 @@ olViewer.prototype.Init = (function (targetId, popupContainer, popupContentObj, 
     //Init arrivals
     arrivals = null;
 
-    //Init layer
+    //Init layers
     vectorLayer = null;
+    routeLayer = null;
 
     //Init popup
     popupContentContainer = popupContentObj
@@ -160,7 +162,6 @@ olViewer.prototype.ClearFeatures = (function () {
         map.removeLayer(vectorLayer);
         vectorLayer = null;
     }
-
 });
 //Center features
 olViewer.prototype.CenterFeatures = (function (features) {
@@ -192,6 +193,7 @@ olViewer.prototype.OpenPopup = (function (arrival, onlyArrival, coordinates) {
         coordinates = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
     }
     overlay.setPosition(coordinates);
+    this.AddRoute(dAirport, aAirport);
 });
 //Generate content pop up
 olViewer.prototype.GetContentPopup = (function (arrival, dAirport, aAirport) {
@@ -274,4 +276,43 @@ olViewer.prototype.GetContentPopup = (function (arrival, dAirport, aAirport) {
 //Close popup
 olViewer.prototype.ClosePopup = (function () {
     overlay.setPosition(undefined);
+    this.RemoveRoute();
+});
+//Add route layer
+olViewer.prototype.AddRoute = (function (dAirport, aAirport) {
+    this.RemoveRoute();
+    if (dAirport == null || aAirport == null)
+        return;
+    
+    var lon = parseFloat(dAirport.longitude);
+    var lat = parseFloat(dAirport.latitude);
+    var lon2 = parseFloat(aAirport.longitude);
+    var lat2 = parseFloat(aAirport.latitude);
+
+    var coords1 = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+    var coords2 = ol.proj.transform([lon2, lat2], 'EPSG:4326', 'EPSG:3857');
+
+    var route = new ol.Feature({
+        geometry: new ol.geom.LineString([coords1, coords2]),
+    });
+    var features = [route];
+    
+    var routeSource = new ol.source.Vector({ features: features });
+    routeLayer = new ol.layer.Vector({
+        source: routeSource,
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#F6FF84',
+                width: 2,
+            }),
+        }),
+    });
+    map.addLayer(routeLayer);
+});
+//Remove route layer
+olViewer.prototype.RemoveRoute = (function () {
+    if (routeLayer  != null) {
+        map.removeLayer(routeLayer );
+        routeLayer  = null;
+    }
 });
