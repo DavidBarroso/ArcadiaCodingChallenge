@@ -91,7 +91,7 @@
                 var keys = ['estDepartureAirport', 'callsign'];
                 var values = [departureICAO, callsign];
                 var arrivalJson = viewer.GetArrival(keys, values);
-                viewer.OpenPopup(arrivalJson);
+                viewer.OpenPopup(arrivalJson, false);
             }
             
         });

@@ -13,8 +13,8 @@
     border: 1px solid #cccccc;
     bottom: 12px;
     left: -50px;
-    min-width: 280px;
-    width: 30em
+    white-space: nowrap;
+    overflow-wrap: break-word;
 }
 
 .ol-popup:after, .ol-popup:before {
