@@ -129,7 +129,7 @@ Sometime I thought to separate the two endpoints into two individual services, f
 For the client side, I use a cluster of technologies, like aspnet core v3.1 with MVC and bootstrap for the basic architecture, together with jquery and openlayers v6 JavaScript API for the map viewer.
 Special mention, to the olViewer class to create the map viewer, that has been done using the technique of adding methods to the prototype, writing the global variables in the constructor and adding the methods afterwards. 
 ### ###
-Also, the system uses a RestSharp library, that it is an implementation rest client to connect with REST services.
+Also, the system uses a RestSharp library, that it is an implementation rest client to connect with rest services.
 ## Deployment: ##
 All the systems can be deployed into dockers containers, I provide the Dockerfile for backend and frontend to build the images to deploy into Dockerdesktop o any docker services, always with Linux as operative system.
 In addition, provides the docker-compose.yml to deploy the both images of backend and frontend altogether into separates dockers like separated services, but with only one command.
